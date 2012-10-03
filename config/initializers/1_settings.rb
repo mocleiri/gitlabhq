@@ -112,18 +112,12 @@ class Settings < Settingslogic
 
     def backup_path
       t = app['backup_path'] || "backups/"
-      t = /^\//.match(t) ? t : File.join(Rails.root + t)
+      t = /^\//.match(t) ? t : Rails.root .join(t)
       t
     end
 
     def backup_keep_time
       app['backup_keep_time'] || 0
-    end
-
-    def ldap_enabled?
-      ldap && ldap['enabled']
-    rescue Settingslogic::MissingSetting
-      false
     end
 
     def omniauth_enabled?
@@ -133,7 +127,7 @@ class Settings < Settingslogic
     end
 
     def omniauth_providers
-      (omniauth_enabled? && omniauth['providers']) || []
+      (omniauth_enabled? && omniauth['providers']) || {}
     end
 
     def disable_gravatar?
